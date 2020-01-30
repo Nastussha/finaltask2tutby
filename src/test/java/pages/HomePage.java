@@ -35,25 +35,13 @@ public class HomePage {
         return new LoggedInHomePage();
     }
 
-    public MailPage openMail(){
+    public MailPage openMail() {
         driver.findElement(LOGGED_IN_LINK).click();
         driver.findElement(EMAIL_BUTTON).click();
-        WebDriverWait wait = new WebDriverWait(driver,10);
+        WebDriverWait wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.numberOfWindowsToBe(2));
         ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
         driver.switchTo().window(tabs.get(1));
-        //driver.close();
-        //driver.switchTo().window(tabs2.get(0));
-        //driver.findElement(By.cssSelector(".search-input__form-activator")).click();
         return new MailPage();
     }
-
-    /*
-    public boolean getLoggedInResult() {
-        try {
-            return driver.findElement(LOGGED_IN_RESULT).isDisplayed();
-        } catch (NoSuchElementException e) {
-            return false;
-        }
-    }*/
 }

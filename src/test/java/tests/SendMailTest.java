@@ -1,12 +1,18 @@
 package tests;
 
 import driver.WebDriverSingleton;
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
+import junit.MyExtension;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import pages.HomePage;
 import pages.MailPage;
-import property.Helpers;
+import extra.GenerateString;
 
+@ExtendWith(MyExtension.class)
 public class SendMailTest {
 
     private static final String TEST_LOGIN = "seleniumtests@tut.by";
@@ -39,9 +45,12 @@ public class SendMailTest {
         WebDriverSingleton.quitBrowser();
     }
 
+    @Feature("Send email")
+    @Description("Verifies if user can send email and the second user receives email")
+    @Issue("ID_2")
     @Test
     void sendMailSecondUserCheck() {
-        emailSubjectSent = Helpers.generateString();
+        emailSubjectSent = GenerateString.generateString();
         mailPage.sendMail(TEST_LOGIN_2, emailSubjectSent);
         mailPage.logout();
         mailPage.switchToPreviousTab();
@@ -52,9 +61,12 @@ public class SendMailTest {
         Assertions.assertTrue(mailPage.isEmailTitleExists(emailSubjectSent), "Email is sent and received by the second user");
     }
 
+    @Feature("Send email")
+    @Description("Verifies if user can send email and email appears in sent folder")
+    @Issue("ID_3")
     @Test
     void sendMailFolderCheck() {
-        emailSubjectSent = Helpers.generateString();
+        emailSubjectSent = GenerateString.generateString();
         mailPage.sendMail(TEST_LOGIN_2, emailSubjectSent);
         mailPage.navigateToSendEmailFolder();
         Assertions.assertTrue(mailPage.isEmailTitleExists(emailSubjectSent), "Email is sent and displayed in Sent email folder");

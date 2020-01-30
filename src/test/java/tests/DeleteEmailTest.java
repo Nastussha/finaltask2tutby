@@ -1,22 +1,25 @@
 package tests;
 
 import driver.WebDriverSingleton;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import io.qameta.allure.Description;
+import io.qameta.allure.Feature;
+import io.qameta.allure.Issue;
+import junit.MyExtension;
+import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import pages.HomePage;
 import pages.MailPage;
-import property.Helpers;
+import extra.GenerateString;
 
+@ExtendWith(MyExtension.class)
 public class DeleteEmailTest {
 
     private static final String TEST_LOGIN = "seleniumtests@tut.by";
     private static final String TEST_PASSWORD = "123456789zxcvbn";
 
     private static final String TEST_LOGIN_2 = "seleniumtests2@tut.by";
-    private static final String TEST_PASSWORD_2 = "123456789zxcvbn";
+    //private static final String TEST_PASSWORD_2 = "123456789zxcvbn";
 
     WebDriver driver;
     HomePage homePage;
@@ -30,7 +33,7 @@ public class DeleteEmailTest {
         homePage.load();
         homePage.login(TEST_LOGIN, TEST_PASSWORD);
         mailPage = homePage.openMail();
-        emailSubjectSent = Helpers.generateString();
+        emailSubjectSent = GenerateString.generateString();
         mailPage.sendMail(TEST_LOGIN_2, emailSubjectSent);
         mailPage.navigateToSendEmailFolder();
     }
@@ -40,6 +43,14 @@ public class DeleteEmailTest {
         WebDriverSingleton.closeBrowser();
     }
 
+    @AfterAll
+    public static void quitBrowser() {
+        WebDriverSingleton.quitBrowser();
+    }
+
+    @Feature("Delete emails")
+    @Description("Verifies if user delete email and the email appears in deleted folder")
+    @Issue("ID_4")
     @Test
     void deleteMailFolderCheck() {
         mailPage.deleteMailFromSentFolder();

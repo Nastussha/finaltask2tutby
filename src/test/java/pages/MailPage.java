@@ -11,9 +11,6 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import static java.util.concurrent.TimeUnit.SECONDS;
 
 public class MailPage {
     private static final By NEW_MAIL = By.cssSelector(".mail-ComposeButton");
@@ -83,8 +80,6 @@ public class MailPage {
         wait.until(ExpectedConditions.presenceOfElementLocated(DELETE_ICON));
         driver.findElement(DELETE_ICON).click();
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(ALL_CHECKBOXES_ON_SENT_FOLDER));
-        //wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(TRASH_EMAILS_FOLDER));
-        //driver.findElement(TRASH_EMAILS_FOLDER).click();
         return new MailPage();
     }
 
@@ -102,6 +97,7 @@ public class MailPage {
 
     public boolean getLoggedInResult() {
         try {
+            wait.until(ExpectedConditions.presenceOfElementLocated(LOGGED_IN_RESULT));
             return driver.findElement(LOGGED_IN_RESULT).isDisplayed();
         } catch (NoSuchElementException e) {
             return false;

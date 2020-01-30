@@ -2,6 +2,7 @@ package driver;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+
 import java.util.concurrent.TimeUnit;
 
 public class WebDriverSingleton {
@@ -15,12 +16,12 @@ public class WebDriverSingleton {
         return driver;
     }
 
-    public static void closeBrowser(){
+    public static void closeBrowser() {
         driver.close();
-        driver = null;
+        //driver = null;
     }
 
-    public static void quitBrowser(){
+    public static void quitBrowser() {
         driver.quit();
         driver = null;
     }
