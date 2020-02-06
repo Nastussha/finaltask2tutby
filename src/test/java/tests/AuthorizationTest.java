@@ -11,18 +11,17 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
 import org.openqa.selenium.WebDriver;
 import pages.HomePage;
-import pages.MailPage;
+import pages.LoggedInHomePage;
+import pages.InboxFolderPage;
 
 @ExtendWith(MyExtension.class)
-public class LoginTest {
-
-    //private static final String TEST_LOGIN = "seleniumtests@tut.by";
-    //private static final String TEST_PASSWORD = "123456789zxcvbn";
+public class AuthorizationTest {
 
     WebDriver driver;
 
     HomePage homePage;
-    MailPage mailPage;
+    InboxFolderPage inboxFolderPage;
+    LoggedInHomePage loggedInHomePage;
 
     @BeforeEach
     public void openBrowser() {
@@ -34,11 +33,6 @@ public class LoginTest {
         WebDriverSingleton.closeBrowser();
     }
 
-    @AfterAll
-    public static void quitBrowser() {
-        WebDriverSingleton.quitBrowser();
-    }
-
     @Feature("Authorization")
     @Description("Verifies if user can log in")
     @Issue("ID_1")
@@ -47,8 +41,21 @@ public class LoginTest {
     public void login(String username, String password) {
         homePage = new HomePage();
         homePage.load();
-        homePage.login(username, password);
-        mailPage = homePage.openMail();
-        Assertions.assertTrue(mailPage.getLoggedInResult(), "User is logged in");
+        loggedInHomePage = homePage.login(username, password);
+        inboxFolderPage = loggedInHomePage.openMail();
+        Assertions.assertTrue(inboxFolderPage.getLoggedInResult(), "User is logged in");
+    }
+
+    @Feature("Authorization")
+    @Description("Verifies if user can log out")
+    @Issue("ID_5")
+    @ParameterizedTest
+    @CsvFileSource(resources = "/testData.csv", numLinesToSkip = 1)
+    public void logout(String username, String password) {
+        homePage = new HomePage();
+        homePage.load();
+        loggedInHomePage = homePage.login(username, password);
+        loggedInHomePage.logout();
+        Assertions.assertTrue(loggedInHomePage.getLogOutResult(), "User is not logged out");
     }
 }
