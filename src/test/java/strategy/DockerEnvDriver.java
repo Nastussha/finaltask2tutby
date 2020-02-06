@@ -8,21 +8,17 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class SauceLabsEnvDriver implements Strategy {
-
-    public static final String USERNAME = "Avlano";
-    public static final String ACCESS_KEY = "309c148c-b72a-4d00-b4ed-963fe14374bf";
-    public static final String URL = "http://" + USERNAME + ":" + ACCESS_KEY + "@ondemand.saucelabs.com:80/wd/hub";
-
-
+public class DockerEnvDriver implements Strategy{
     public static WebDriver driver;
+    public static final String URL = "http://localhost:4444/wd/hub/";
+
 
     public static WebDriver getInstance() {
         try {
             if (driver == null) {
                 DesiredCapabilities caps = DesiredCapabilities.firefox();
-                caps.setCapability("platform", "Windows 8.1");
-                caps.setCapability("version", "39.0");
+                caps.setCapability("platform", "Linux");
+                caps.setCapability("version", "71.0");
                 driver = new RemoteWebDriver(new URL(URL), caps);
                 driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
             }
@@ -39,7 +35,7 @@ public class SauceLabsEnvDriver implements Strategy {
 
     @Override
     public WebDriver createStrategyDriver() {
-        return SauceLabsEnvDriver.getInstance();
+        return DockerEnvDriver.getInstance();
     }
 
     @Override

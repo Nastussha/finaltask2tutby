@@ -1,8 +1,10 @@
 package strategy;
 
-public interface Strategy {
-    String env = System.getProperty("environment");
+import org.openqa.selenium.WebDriver;
 
-    void setStrategy ();
+public interface Strategy {
+
+    WebDriver createStrategyDriver();
+    void closeStrategyDriver();
 
 }

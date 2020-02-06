@@ -13,6 +13,7 @@ import org.openqa.selenium.WebDriver;
 import pages.HomePage;
 import pages.LoggedInHomePage;
 import pages.InboxFolderPage;
+import strategy.WebDriverLaunch;
 
 @ExtendWith(MyExtension.class)
 public class AuthorizationTest {
@@ -22,15 +23,17 @@ public class AuthorizationTest {
     HomePage homePage;
     InboxFolderPage inboxFolderPage;
     LoggedInHomePage loggedInHomePage;
+    WebDriverLaunch webDriverLaunch;
 
     @BeforeEach
     public void openBrowser() {
-        driver = WebDriverSingleton.getInstance();
+        webDriverLaunch = new WebDriverLaunch();
+        driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
     }
 
     @AfterEach
     public void closeBrowser() {
-        WebDriverSingleton.closeBrowser();
+        webDriverLaunch.get().closeDriver();
     }
 
     @Feature("Authorization")

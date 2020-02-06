@@ -1,6 +1,5 @@
 package tests;
 
-import driver.WebDriverSingleton;
 import extra.PropertyValues;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
@@ -11,11 +10,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.WebDriver;
 import pages.*;
 import extra.GenerateString;
+import strategy.WebDriverLaunch;
 
 @ExtendWith(MyExtension.class)
 public class MailTest {
 
     WebDriver driver;
+    WebDriverLaunch webDriverLaunch;
     HomePage homePage;
     LoggedInHomePage loggedInHomePage;
     InboxFolderPage inboxFolderPage;
@@ -26,7 +27,8 @@ public class MailTest {
 
     @BeforeEach
     public void openBrowser() {
-        driver = WebDriverSingleton.getInstance();
+        webDriverLaunch = new WebDriverLaunch();
+        driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
         homePage = new HomePage();
         homePage.load();
         loggedInHomePage = homePage.login(PropertyValues.get("test_login"), PropertyValues.get("test_password"));
@@ -35,7 +37,7 @@ public class MailTest {
 
     @AfterEach
     public void closeBrowser() {
-        WebDriverSingleton.closeBrowser();
+        webDriverLaunch.get().closeDriver();
     }
 
     @Feature("Send email")
