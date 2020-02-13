@@ -2,13 +2,13 @@ package driver;
 
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import strategy.Strategy;
+import strategy.EnvStrategy;
 
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 public class WebDriverSingleton {
-    Strategy strategy;
+    EnvStrategy envStrategy;
     public static WebDriver driver;
 
     public static WebDriver getInstance() {

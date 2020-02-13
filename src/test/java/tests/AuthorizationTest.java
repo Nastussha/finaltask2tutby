@@ -1,6 +1,5 @@
 package tests;
 
-import driver.WebDriverSingleton;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
@@ -28,7 +27,8 @@ public class AuthorizationTest {
     @BeforeEach
     public void openBrowser() {
         webDriverLaunch = new WebDriverLaunch();
-        driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
+        //driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
+        driver = webDriverLaunch.launchDriver("local", "firefox");
     }
 
     @AfterEach

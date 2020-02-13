@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class SauceLabsEnvDriver implements Strategy {
+public class SauceLabsEnvDriver implements EnvStrategy {
 
     public static final String USERNAME = "Avlano";
     public static final String ACCESS_KEY = "309c148c-b72a-4d00-b4ed-963fe14374bf";

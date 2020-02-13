@@ -1,8 +1,9 @@
 package pages;
 
-import driver.WebDriverSingleton;
+import extra.PropertyValues;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import strategy.MyWebDriver;
 
 public class HomePage {
     private static final By LOGIN_LINK = By.className("enter");
@@ -10,11 +11,11 @@ public class HomePage {
     private static final By PASSWORD = By.name("password");
     private static final By LOGIN_BUTTON = By.xpath(".//input[contains(@class, 'button auth__enter')]");
 
-    private static final String URL = "https://www.tut.by/";
-    private final WebDriver driver;
+    private static final String URL = PropertyValues.get("url");
+    WebDriver driver;
 
     public HomePage() {
-        this.driver = WebDriverSingleton.getInstance();
+        this.driver = MyWebDriver.getWebDriverInstance();
     }
 
     public void load() {

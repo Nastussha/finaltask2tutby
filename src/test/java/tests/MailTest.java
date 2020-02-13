@@ -28,7 +28,8 @@ public class MailTest {
     @BeforeEach
     public void openBrowser() {
         webDriverLaunch = new WebDriverLaunch();
-        driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
+        //driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
+        driver = webDriverLaunch.launchDriver("local", "firefox");
         homePage = new HomePage();
         homePage.load();
         loggedInHomePage = homePage.login(PropertyValues.get("test_login"), PropertyValues.get("test_password"));
@@ -37,6 +38,18 @@ public class MailTest {
 
     @AfterEach
     public void closeBrowser() {
+        if (inboxFolderPage != null){
+            inboxFolderPage.deleteLastMailInFolder();
+            inboxFolderPage = null;
+        }
+        if (sentFolderPage != null){
+            sentFolderPage.deleteLastMailInFolder();
+            sentFolderPage = null;
+        }
+        if (trashFolderPage != null){
+            trashFolderPage.deleteLastMailInFolder();
+            trashFolderPage = null;
+        }
         webDriverLaunch.get().closeDriver();
     }
 
@@ -47,9 +60,8 @@ public class MailTest {
     void sendMailSecondUserCheck() {
         newEmailPage = inboxFolderPage.navigateToNewEmailPage();
         emailSubjectSent = GenerateString.generateString();
-        inboxFolderPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent);
-        inboxFolderPage.logout();
-        homePage = inboxFolderPage.switchToPreviousTab();
+        homePage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent)
+                .logout().switchToHomePageTab();
         homePage.refreshPage();
         loggedInHomePage = homePage.login(PropertyValues.get("test_login2"), PropertyValues.get("test_password2"));
         inboxFolderPage = loggedInHomePage.openMail();
@@ -63,8 +75,8 @@ public class MailTest {
     void sendMailFolderCheck() {
         newEmailPage = inboxFolderPage.navigateToNewEmailPage();
         emailSubjectSent = GenerateString.generateString();
-        inboxFolderPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent);
-        sentFolderPage = inboxFolderPage.navigateToSendEmailFolder();
+        sentFolderPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent)
+                .navigateToSendEmailFolder();
         Assertions.assertTrue(sentFolderPage.isEmailTitleExists(emailSubjectSent), "Email is sent and displayed in Sent email folder");
     }
 
@@ -75,9 +87,9 @@ public class MailTest {
     void deleteMailFolderCheck() {
         newEmailPage = inboxFolderPage.navigateToNewEmailPage();
         emailSubjectSent = GenerateString.generateString();
-        inboxFolderPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent);
-        sentFolderPage = inboxFolderPage.navigateToSendEmailFolder();
-        sentFolderPage.deleteMailFromSentFolder();
+        sentFolderPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent)
+                .navigateToSendEmailFolder();
+        sentFolderPage.deleteLastMailInFolder();
         trashFolderPage = sentFolderPage.navigateToTrashEmailFolder();
         Assertions.assertTrue(trashFolderPage.isEmailTitleExists(emailSubjectSent), "Email from Sent folder is deleted and located in Trash folder");
     }

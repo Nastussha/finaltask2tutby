@@ -5,6 +5,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import strategy.MyWebDriver;
 
 public class NewEmailPage {
 
@@ -18,18 +19,17 @@ public class NewEmailPage {
     WebDriverWait wait;
 
     public NewEmailPage() {
-        this.driver = WebDriverSingleton.getInstance();
-    }
-    //WebDriverWait wait;
-
-    public InboxFolderPage sendMail(String toWhomMail, String emailSubject) {
-        wait = new WebDriverWait(driver, 30);
+        this.driver = MyWebDriver.getWebDriverInstance();
+        wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(NEW_MAIL));
+    }
+
+    public SentEmailPage sendMail(String toWhomMail, String emailSubject) {
         driver.findElement(NEW_MAIL).click();
         driver.findElement(TO_INPUT).sendKeys(toWhomMail);
         driver.findElement(SUBJECT_INPUT).sendKeys(emailSubject);
         driver.findElement(SEND_BUTTON).click();
         wait.until(ExpectedConditions.presenceOfElementLocated(EMAIL_SENT_MESSAGE));
-        return new InboxFolderPage();
+        return new SentEmailPage();
     }
 }

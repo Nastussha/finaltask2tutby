@@ -8,7 +8,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-public class DockerEnvDriver implements Strategy{
+public class DockerEnvDriver implements EnvStrategy {
     public static WebDriver driver;
     public static final String URL = "http://localhost:4444/wd/hub/";
 

@@ -4,18 +4,24 @@ import org.openqa.selenium.WebDriver;
 
 public class MyWebDriver {
 
-    Strategy strategy;
+    private static EnvStrategy envType;
+    private static String browserType;
 
-    public MyWebDriver(Strategy strategy) {
-        this.strategy = strategy;
+    public MyWebDriver(EnvStrategy envType, String browserType) {
+        this.envType = envType;
+        this.browserType = browserType;
     }
 
-    public WebDriver initializeWebDriver() {
-        return strategy.createStrategyDriver();
+    public String getBrowserType() {
+        return browserType;
+    }
+
+    public static WebDriver getWebDriverInstance() {
+        return envType.createStrategyDriver();
     }
 
     public void closeDriver(){
-        strategy.closeStrategyDriver();
+        envType.closeStrategyDriver();
     }
 
 }

@@ -2,7 +2,7 @@ package strategy;
 
 import org.openqa.selenium.WebDriver;
 
-public interface Strategy {
+public interface EnvStrategy {
 
     WebDriver createStrategyDriver();
     void closeStrategyDriver();

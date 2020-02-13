@@ -3,22 +3,39 @@ package strategy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
 
-public class LocalEnvDriver implements Strategy {
+public class LocalEnvDriver implements EnvStrategy {
 
     private static WebDriver driver;
 
     private static WebDriver getInstance() {
+        if (System.getProperty("browser").equals("chrome")){
+            return initChromeDriver();
+        } else {
+            return initFirefoxDriver();
+        }
+    }
+
+    private static WebDriver initFirefoxDriver(){
         if (driver == null) {
             driver = new FirefoxDriver();
-            driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        }
+        return driver;
+    }
+
+    private static WebDriver initChromeDriver(){
+        if (driver == null) {
+            driver = new FirefoxDriver();
         }
         return driver;
     }
 
     private static void closeBrowser(){
-        driver.close();
+        ArrayList<String> tabs = new ArrayList<String>(driver.getWindowHandles());
+        for (int i = 0; i < tabs.size(); i++){
+            driver.switchTo().window(tabs.get(i)).close();
+        }
         driver = null;
     }
 
@@ -31,6 +48,5 @@ public class LocalEnvDriver implements Strategy {
     public void closeStrategyDriver() {
         closeBrowser();
     }
-
 
 }
