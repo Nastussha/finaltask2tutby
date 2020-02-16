@@ -42,4 +42,9 @@ public class DockerEnvDriver implements EnvStrategy {
     public void closeStrategyDriver() {
 
     }
+
+    @Override
+    public void quitStrategyDriver() {
+
+    }
 }

@@ -10,6 +10,7 @@ import strategy.MyWebDriver;
 public class NewEmailPage {
 
     private static final By NEW_MAIL = By.cssSelector(".mail-ComposeButton");
+
     private static final By TO_INPUT = By.xpath("//div[contains(@name, 'to')]");
     private static final By SUBJECT_INPUT = By.xpath("//input[contains(@class, 'mail-Compose-Field-Input-Controller')]");
     private static final By SEND_BUTTON = By.id("nb-13");
@@ -21,11 +22,10 @@ public class NewEmailPage {
     public NewEmailPage() {
         this.driver = MyWebDriver.getWebDriverInstance();
         wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.visibilityOfElementLocated(NEW_MAIL));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(TO_INPUT));
     }
 
     public SentEmailPage sendMail(String toWhomMail, String emailSubject) {
-        driver.findElement(NEW_MAIL).click();
         driver.findElement(TO_INPUT).sendKeys(toWhomMail);
         driver.findElement(SUBJECT_INPUT).sendKeys(emailSubject);
         driver.findElement(SEND_BUTTON).click();

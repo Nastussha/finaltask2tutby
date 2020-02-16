@@ -6,13 +6,13 @@ public class WebDriverLaunch {
     MyWebDriver myWebDriver;
 
 
-    public WebDriver launchDriver(String mvnStrategy, String browser) {
+    public WebDriver launchDriver(String mvnStrategy) {
         if (mvnStrategy.equals("local")) {
-            myWebDriver = new MyWebDriver(new LocalEnvDriver(), browser);
+            myWebDriver = new MyWebDriver(new LocalEnvDriver());
         } else if (mvnStrategy.equals("saucelabs")) {
-            myWebDriver = new MyWebDriver(new SauceLabsEnvDriver(), browser);
+            myWebDriver = new MyWebDriver(new SauceLabsEnvDriver());
         } else if (mvnStrategy.equals("docker")) {
-            myWebDriver = new MyWebDriver(new DockerEnvDriver(), browser);
+            myWebDriver = new MyWebDriver(new DockerEnvDriver());
         }
         return myWebDriver.getWebDriverInstance();
     }

@@ -6,5 +6,6 @@ public interface EnvStrategy {
 
     WebDriver createStrategyDriver();
     void closeStrategyDriver();
+    void quitStrategyDriver();
 
 }

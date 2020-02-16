@@ -46,4 +46,9 @@ public class SauceLabsEnvDriver implements EnvStrategy {
     public void closeStrategyDriver() {
 
     }
+
+    @Override
+    public void quitStrategyDriver() {
+
+    }
 }

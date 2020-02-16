@@ -13,7 +13,9 @@ import strategy.MyWebDriver;
 import java.util.List;
 
 public class TrashFolderPage extends SkeletonPage{
+
     private static final By ALL_EMAIL_SUBJECT_ON_LIST = By.xpath("//span[contains(@class, 'mail-MessageSnippet-Item_subject')]/span[@title]");
+    private static final By NO_EMAILS_MESSAGE = By.cssSelector(".b-messages__placeholder-item");
 
     private static final By TRASH_EMAILS_FOLDER = By.xpath("//a[@href='#trash']");
 
@@ -26,7 +28,10 @@ public class TrashFolderPage extends SkeletonPage{
     public TrashFolderPage() {
         this.driver = MyWebDriver.getWebDriverInstance();
         wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(TRASH_EMAILS_FOLDER));
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(ALL_EMAIL_SUBJECT_ON_LIST),
+                ExpectedConditions.presenceOfAllElementsLocatedBy(NO_EMAILS_MESSAGE)
+        ));
     }
 
 }

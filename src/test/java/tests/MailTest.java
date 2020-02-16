@@ -15,21 +15,26 @@ import strategy.WebDriverLaunch;
 @ExtendWith(MyExtension.class)
 public class MailTest {
 
-    WebDriver driver;
-    WebDriverLaunch webDriverLaunch;
+    static WebDriver driver;
+    static WebDriverLaunch webDriverLaunch;
     HomePage homePage;
     LoggedInHomePage loggedInHomePage;
+    SentEmailPage sentEmailPage;
     InboxFolderPage inboxFolderPage;
     NewEmailPage newEmailPage;
     SentFolderPage sentFolderPage;
     TrashFolderPage trashFolderPage;
     String emailSubjectSent;
 
-    @BeforeEach
-    public void openBrowser() {
+    @BeforeAll
+    public static void openBrowser(){
         webDriverLaunch = new WebDriverLaunch();
-        //driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
-        driver = webDriverLaunch.launchDriver("local", "firefox");
+        driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
+        //driver = webDriverLaunch.launchDriver("local");
+    }
+
+    @BeforeEach
+    public void runPrecondition() {
         homePage = new HomePage();
         homePage.load();
         loggedInHomePage = homePage.login(PropertyValues.get("test_login"), PropertyValues.get("test_password"));
@@ -46,11 +51,16 @@ public class MailTest {
             sentFolderPage.deleteLastMailInFolder();
             sentFolderPage = null;
         }
-        if (trashFolderPage != null){
-            trashFolderPage.deleteLastMailInFolder();
-            trashFolderPage = null;
+        if (this.trashFolderPage != null){
+            this.trashFolderPage.deleteLastMailInFolder();
+            this.trashFolderPage = null;
         }
-        webDriverLaunch.get().closeDriver();
+        this.webDriverLaunch.get().closeDriver();
+    }
+
+    @AfterAll
+    public static void quitBrowser(){
+        webDriverLaunch.get().quitDriver();
     }
 
     @Feature("Send email")
@@ -75,8 +85,8 @@ public class MailTest {
     void sendMailFolderCheck() {
         newEmailPage = inboxFolderPage.navigateToNewEmailPage();
         emailSubjectSent = GenerateString.generateString();
-        sentFolderPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent)
-                .navigateToSendEmailFolder();
+        sentEmailPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent);
+        sentFolderPage = sentEmailPage.navigateToSendEmailFolder();
         Assertions.assertTrue(sentFolderPage.isEmailTitleExists(emailSubjectSent), "Email is sent and displayed in Sent email folder");
     }
 
@@ -87,10 +97,10 @@ public class MailTest {
     void deleteMailFolderCheck() {
         newEmailPage = inboxFolderPage.navigateToNewEmailPage();
         emailSubjectSent = GenerateString.generateString();
-        sentFolderPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent)
-                .navigateToSendEmailFolder();
-        sentFolderPage.deleteLastMailInFolder();
-        trashFolderPage = sentFolderPage.navigateToTrashEmailFolder();
-        Assertions.assertTrue(trashFolderPage.isEmailTitleExists(emailSubjectSent), "Email from Sent folder is deleted and located in Trash folder");
+        sentEmailPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent);
+        sentFolderPage = sentEmailPage.navigateToSendEmailFolder();
+        this.sentFolderPage.deleteLastMailInFolder();
+        this.trashFolderPage = this.sentFolderPage.navigateToTrashEmailFolder();
+        Assertions.assertTrue(this.trashFolderPage.isEmailTitleExists(emailSubjectSent), "Email from Sent folder is deleted and located in Trash folder");
     }
 }

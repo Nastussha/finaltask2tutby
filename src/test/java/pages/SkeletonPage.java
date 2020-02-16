@@ -36,7 +36,7 @@ public class SkeletonPage {
 
 
     public NewEmailPage navigateToNewEmailPage() {
-        driver.findElement(NEW_MAIL);
+        driver.findElement(NEW_MAIL).click();
         return new NewEmailPage();
     }
 
@@ -56,12 +56,16 @@ public class SkeletonPage {
         return new YandexPage();
     }
 
-    public InboxFolderPage deleteLastMailInFolder() {
-        List<WebElement> checkboxes = driver.findElements(ALL_LETTER_CHECKBOXES_IN_FOLDER);
-        Actions act = new Actions(driver);
-        act.moveToElement(checkboxes.get(0)).click().perform();
-        driver.findElement(DELETE_ICON).click();
-        return new InboxFolderPage();
+    public void deleteLastMailInFolder() {
+        try {
+            List<WebElement> checkboxes = driver.findElements(ALL_LETTER_CHECKBOXES_IN_FOLDER);
+            Actions act = new Actions(driver);
+            act.moveToElement(checkboxes.get(0)).click().perform();
+            driver.findElement(DELETE_ICON).click();
+        } catch (IndexOutOfBoundsException e){
+        } catch (NullPointerException e){
+        }
+
     }
 
     public boolean isEmailTitleExists(String emailSubjectSent) {
@@ -70,6 +74,7 @@ public class SkeletonPage {
             String emailText = emailSubject.get(0).getText();
             return emailText.equals(emailSubjectSent);
         } catch (NoSuchElementException e) {
+            e.printStackTrace();
             return false;
         }
     }

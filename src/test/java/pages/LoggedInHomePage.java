@@ -12,13 +12,16 @@ import java.util.ArrayList;
 public class LoggedInHomePage {
     private static final By LOGGED_IN_LINK = By.xpath(".//a[contains(@class, 'logedin')]");
     private static final By LOGGED_OUT_BUTTON = By.xpath(".//a[contains(@class, 'auth__reg')]");
-    private static final By LOGGED_OUT_RESULT = By.xpath(".//a[@class = 'enter']");
+
     private static final By EMAIL_BUTTON = By.xpath("//li[@class='auth-navigation__li']/a[contains(text(), 'Почта')]");
 
-    private final WebDriver driver;
+    WebDriver driver;
+    WebDriverWait wait;
 
     public LoggedInHomePage() {
         this.driver = MyWebDriver.getWebDriverInstance();
+        wait = new WebDriverWait(driver, 10);
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(LOGGED_IN_LINK));
     }
 
     public HomePage logout() {
@@ -37,7 +40,5 @@ public class LoggedInHomePage {
         return new InboxFolderPage();
     }
 
-    public boolean getLogOutResult() {
-        return driver.findElement(LOGGED_OUT_RESULT).isDisplayed();
-    }
+
 }

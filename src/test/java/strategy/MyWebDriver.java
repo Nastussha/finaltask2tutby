@@ -5,15 +5,9 @@ import org.openqa.selenium.WebDriver;
 public class MyWebDriver {
 
     private static EnvStrategy envType;
-    private static String browserType;
 
-    public MyWebDriver(EnvStrategy envType, String browserType) {
+    public MyWebDriver(EnvStrategy envType) {
         this.envType = envType;
-        this.browserType = browserType;
-    }
-
-    public String getBrowserType() {
-        return browserType;
     }
 
     public static WebDriver getWebDriverInstance() {
@@ -22,6 +16,10 @@ public class MyWebDriver {
 
     public void closeDriver(){
         envType.closeStrategyDriver();
+    }
+
+    public void quitDriver(){
+        envType.quitStrategyDriver();
     }
 
 }

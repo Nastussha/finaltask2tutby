@@ -15,6 +15,7 @@ import java.util.List;
 public class SentFolderPage extends SkeletonPage{
 
     private static final By ALL_EMAIL_SUBJECT_ON_LIST = By.xpath("//span[contains(@class, 'mail-MessageSnippet-Item_subject')]/span[@title]");
+    private static final By NO_EMAILS_MESSAGE = By.cssSelector(".b-messages__placeholder-item");
 
     private static final By SENT_EMAILS_FOLDER = By.xpath("//a[@href='#sent']");
 
@@ -27,7 +28,9 @@ public class SentFolderPage extends SkeletonPage{
     public SentFolderPage() {
         this.driver = MyWebDriver.getWebDriverInstance();
         wait = new WebDriverWait(driver, 10);
-        wait.until(ExpectedConditions.presenceOfElementLocated(SENT_EMAILS_FOLDER));
+        wait.until(ExpectedConditions.or(
+                ExpectedConditions.presenceOfAllElementsLocatedBy(ALL_EMAIL_SUBJECT_ON_LIST),
+                ExpectedConditions.presenceOfAllElementsLocatedBy(NO_EMAILS_MESSAGE)));
     }
 
 }

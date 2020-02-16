@@ -10,6 +10,7 @@ public class HomePage {
     private static final By LOGIN = By.name("login");
     private static final By PASSWORD = By.name("password");
     private static final By LOGIN_BUTTON = By.xpath(".//input[contains(@class, 'button auth__enter')]");
+    private static final By LOGGED_OUT_RESULT = By.xpath(".//a[@class = 'enter']");
 
     private static final String URL = PropertyValues.get("url");
     WebDriver driver;
@@ -33,5 +34,9 @@ public class HomePage {
     public HomePage refreshPage() {
         driver.navigate().refresh();
         return new HomePage();
+    }
+
+    public boolean getLogOutResult() {
+        return driver.findElement(LOGGED_OUT_RESULT).isDisplayed();
     }
 }

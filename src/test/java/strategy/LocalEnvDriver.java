@@ -1,6 +1,7 @@
 package strategy;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.ArrayList;
@@ -10,11 +11,16 @@ public class LocalEnvDriver implements EnvStrategy {
     private static WebDriver driver;
 
     private static WebDriver getInstance() {
+        /*
         if (System.getProperty("browser").equals("chrome")){
             return initChromeDriver();
         } else {
             return initFirefoxDriver();
         }
+
+         */
+
+        return initFirefoxDriver();
     }
 
     private static WebDriver initFirefoxDriver(){
@@ -26,7 +32,7 @@ public class LocalEnvDriver implements EnvStrategy {
 
     private static WebDriver initChromeDriver(){
         if (driver == null) {
-            driver = new FirefoxDriver();
+            driver = new ChromeDriver();
         }
         return driver;
     }
@@ -39,6 +45,11 @@ public class LocalEnvDriver implements EnvStrategy {
         driver = null;
     }
 
+    private static void quitBrowser(){
+        driver.quit();
+        driver = null;
+    }
+
     @Override
     public WebDriver createStrategyDriver() {
         return LocalEnvDriver.getInstance();
@@ -47,6 +58,11 @@ public class LocalEnvDriver implements EnvStrategy {
     @Override
     public void closeStrategyDriver() {
         closeBrowser();
+    }
+
+    @Override
+    public void quitStrategyDriver() {
+        quitBrowser();
     }
 
 }

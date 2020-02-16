@@ -1,6 +1,5 @@
 package junit;
 
-import driver.WebDriverSingleton;
 import io.qameta.allure.Attachment;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.TestExecutionExceptionHandler;
@@ -10,12 +9,15 @@ import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.opentest4j.AssertionFailedError;
+import strategy.MyWebDriver;
 
 public class MyExtension implements TestWatcher, TestExecutionExceptionHandler {
 
+
+
     @Attachment(value = "Browser Information", type = "txt")
     private String showBrowserInfo() {
-        RemoteWebDriver driver = (RemoteWebDriver) WebDriverSingleton.getInstance();
+        RemoteWebDriver driver = (RemoteWebDriver) MyWebDriver.getWebDriverInstance();
         Capabilities capabilities = driver.getCapabilities();
         String browserName = capabilities.getBrowserName();
         String browserVersion = capabilities.getVersion();
@@ -25,7 +27,7 @@ public class MyExtension implements TestWatcher, TestExecutionExceptionHandler {
 
     @Attachment(value = "Screenshot", type = "image/png")
     private byte[] captureScreenshot() {
-        return ((TakesScreenshot) WebDriverSingleton.getInstance()).getScreenshotAs(OutputType.BYTES);
+        return ((TakesScreenshot) MyWebDriver.getWebDriverInstance()).getScreenshotAs(OutputType.BYTES);
     }
 
     @Override

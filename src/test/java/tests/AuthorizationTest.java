@@ -17,23 +17,34 @@ import strategy.WebDriverLaunch;
 @ExtendWith(MyExtension.class)
 public class AuthorizationTest {
 
-    WebDriver driver;
+    static WebDriver driver;
 
     HomePage homePage;
     InboxFolderPage inboxFolderPage;
     LoggedInHomePage loggedInHomePage;
-    WebDriverLaunch webDriverLaunch;
+    static WebDriverLaunch webDriverLaunch;
 
-    @BeforeEach
-    public void openBrowser() {
+    @BeforeAll
+    public static void openBrowser() {
         webDriverLaunch = new WebDriverLaunch();
         //driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
-        driver = webDriverLaunch.launchDriver("local", "firefox");
+        driver = webDriverLaunch.launchDriver("local");
+    }
+
+    @BeforeEach
+    public void runPrecondition() {
+        homePage = new HomePage();
+        homePage.load();
     }
 
     @AfterEach
     public void closeBrowser() {
         webDriverLaunch.get().closeDriver();
+    }
+
+    @AfterAll
+    public static void quitBrowser(){
+        webDriverLaunch.get().quitDriver();
     }
 
     @Feature("Authorization")
@@ -42,8 +53,6 @@ public class AuthorizationTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/testData.csv", numLinesToSkip = 1)
     public void login(String username, String password) {
-        homePage = new HomePage();
-        homePage.load();
         loggedInHomePage = homePage.login(username, password);
         inboxFolderPage = loggedInHomePage.openMail();
         Assertions.assertTrue(inboxFolderPage.getLoggedInResult(), "User is logged in");
@@ -55,10 +64,8 @@ public class AuthorizationTest {
     @ParameterizedTest
     @CsvFileSource(resources = "/testData.csv", numLinesToSkip = 1)
     public void logout(String username, String password) {
-        homePage = new HomePage();
-        homePage.load();
         loggedInHomePage = homePage.login(username, password);
-        loggedInHomePage.logout();
-        Assertions.assertTrue(loggedInHomePage.getLogOutResult(), "User is not logged out");
+        homePage = loggedInHomePage.logout();
+        Assertions.assertTrue(homePage.getLogOutResult(), "User is not logged out");
     }
 }
