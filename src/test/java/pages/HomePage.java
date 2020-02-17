@@ -1,9 +1,9 @@
 package pages;
 
+import driver.WebDriverSingleton;
 import extra.PropertyValues;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import strategy.MyWebDriver;
 
 public class HomePage {
     private static final By LOGIN_LINK = By.className("enter");
@@ -16,7 +16,7 @@ public class HomePage {
     WebDriver driver;
 
     public HomePage() {
-        this.driver = MyWebDriver.getWebDriverInstance();
+        this.driver = WebDriverSingleton.getInstance().getWebDriver();
     }
 
     public void load() {

@@ -1,17 +1,12 @@
 package pages;
 
 import driver.WebDriverSingleton;
-import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
+import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
-import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import strategy.MyWebDriver;
 
-import java.time.Duration;
 import java.util.ArrayList;
-import java.util.List;
 
 public class InboxFolderPage extends SkeletonPage{
     private static final By NEW_MAIL = By.cssSelector(".mail-ComposeButton");
@@ -30,12 +25,11 @@ public class InboxFolderPage extends SkeletonPage{
     private static final By DELETE_ICON = By.cssSelector(".ns-view-toolbar-button-delete");
     //private static final By EMAIL_SENT_MESSAGE = By.cssSelector(".mail-Done-Title");
 
-    WebDriver driver;
     WebDriverWait wait;
 
 
     public InboxFolderPage() {
-        this.driver = MyWebDriver.getWebDriverInstance();
+        this.driver = WebDriverSingleton.getInstance().getWebDriver();
         wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(INBOX_EMAILS_FOLDER));
     }

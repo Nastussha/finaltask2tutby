@@ -1,8 +1,8 @@
 package pages;
 
+import driver.WebDriverSingleton;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import strategy.MyWebDriver;
 
 import java.util.ArrayList;
 
@@ -13,7 +13,7 @@ public class YandexPage {
 
 
     public YandexPage() {
-        this.driver = MyWebDriver.getWebDriverInstance();
+        this.driver = WebDriverSingleton.getInstance().getWebDriver();
         wait = new WebDriverWait(driver, 10);
     }
 

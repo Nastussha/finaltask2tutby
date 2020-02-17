@@ -1,17 +1,16 @@
 package pages;
 
+import driver.WebDriverSingleton;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import strategy.MyWebDriver;
 
 import java.util.List;
 
-public class SkeletonPage {
+public abstract class SkeletonPage {
 
     private static final By NEW_MAIL = By.cssSelector(".mail-ComposeButton");
 
@@ -27,11 +26,11 @@ public class SkeletonPage {
     private static final By ALL_LETTER_CHECKBOXES_IN_FOLDER = By.cssSelector("._nb-checkbox-input");
     private static final By DELETE_ICON = By.cssSelector(".ns-view-toolbar-button-delete");
 
-    WebDriver driver;
+    protected WebDriver driver;
     WebDriverWait wait;
 
     public SkeletonPage() {
-        this.driver = MyWebDriver.getWebDriverInstance();
+        this.driver = WebDriverSingleton.getInstance().getWebDriver();
     }
 
 

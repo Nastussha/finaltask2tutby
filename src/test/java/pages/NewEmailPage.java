@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import strategy.MyWebDriver;
 
 public class NewEmailPage {
 
@@ -20,7 +19,7 @@ public class NewEmailPage {
     WebDriverWait wait;
 
     public NewEmailPage() {
-        this.driver = MyWebDriver.getWebDriverInstance();
+        this.driver = WebDriverSingleton.getInstance().getWebDriver();
         wait = new WebDriverWait(driver, 10);
         wait.until(ExpectedConditions.visibilityOfElementLocated(TO_INPUT));
     }

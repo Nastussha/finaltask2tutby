@@ -5,7 +5,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import strategy.MyWebDriver;
 
 import java.util.ArrayList;
 
@@ -19,7 +18,7 @@ public class LoggedInHomePage {
     WebDriverWait wait;
 
     public LoggedInHomePage() {
-        this.driver = MyWebDriver.getWebDriverInstance();
+        this.driver = WebDriverSingleton.getInstance().getWebDriver();
         wait = new WebDriverWait(driver, 10);
         //wait.until(ExpectedConditions.visibilityOfElementLocated(LOGGED_IN_LINK));
     }

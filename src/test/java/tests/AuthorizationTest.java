@@ -1,50 +1,52 @@
 package tests;
 
+import driver.WebDriverSingleton;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
 import junit.MyExtension;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
-import org.openqa.selenium.WebDriver;
 import pages.HomePage;
-import pages.LoggedInHomePage;
 import pages.InboxFolderPage;
-import strategy.WebDriverLaunch;
+import pages.LoggedInHomePage;
 
+import java.util.Set;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MyExtension.class)
 public class AuthorizationTest {
-
-    static WebDriver driver;
 
     HomePage homePage;
     InboxFolderPage inboxFolderPage;
     LoggedInHomePage loggedInHomePage;
-    static WebDriverLaunch webDriverLaunch;
 
     @BeforeAll
-    public static void openBrowser() {
-        webDriverLaunch = new WebDriverLaunch();
-        //driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
-        driver = webDriverLaunch.launchDriver("local");
-    }
-
-    @BeforeEach
-    public void runPrecondition() {
+    public void openBrowser() {
         homePage = new HomePage();
         homePage.load();
     }
 
     @AfterEach
-    public void closeBrowser() {
-        webDriverLaunch.get().closeDriver();
+    public void tearDown() {
+        Set<String> windowHandles = WebDriverSingleton.getInstance().getWebDriver().getWindowHandles();
+        if (windowHandles.size() > 1) {
+            WebDriverSingleton.getInstance().getWebDriver().close();
+            WebDriverSingleton.getInstance().getWebDriver().switchTo().window(windowHandles.iterator().next());
+        }
+        WebDriverSingleton.getInstance().getWebDriver().manage().deleteAllCookies();
+        WebDriverSingleton.getInstance().getWebDriver().navigate().refresh();
     }
 
     @AfterAll
     public static void quitBrowser(){
-        webDriverLaunch.get().quitDriver();
+        WebDriverSingleton.getInstance().closeWebDriver();
     }
 
     @Feature("Authorization")

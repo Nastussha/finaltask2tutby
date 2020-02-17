@@ -1,22 +1,34 @@
 package tests;
 
+import driver.WebDriverSingleton;
+import extra.GenerateString;
 import extra.PropertyValues;
 import io.qameta.allure.Description;
 import io.qameta.allure.Feature;
 import io.qameta.allure.Issue;
 import junit.MyExtension;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.openqa.selenium.WebDriver;
-import pages.*;
-import extra.GenerateString;
-import strategy.WebDriverLaunch;
+import pages.HomePage;
+import pages.InboxFolderPage;
+import pages.LoggedInHomePage;
+import pages.NewEmailPage;
+import pages.SentEmailPage;
+import pages.SentFolderPage;
+import pages.TrashFolderPage;
 
+import java.util.Set;
+
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @ExtendWith(MyExtension.class)
 public class MailTest {
 
-    static WebDriver driver;
-    static WebDriverLaunch webDriverLaunch;
     HomePage homePage;
     LoggedInHomePage loggedInHomePage;
     SentEmailPage sentEmailPage;
@@ -27,16 +39,13 @@ public class MailTest {
     String emailSubjectSent;
 
     @BeforeAll
-    public static void openBrowser(){
-        webDriverLaunch = new WebDriverLaunch();
-        driver = webDriverLaunch.launchDriver(System.getProperty("strategy"));
-        //driver = webDriverLaunch.launchDriver("local");
+    public void openBrowser(){
+        homePage = new HomePage();
+        homePage.load();
     }
 
     @BeforeEach
     public void runPrecondition() {
-        homePage = new HomePage();
-        homePage.load();
         loggedInHomePage = homePage.login(PropertyValues.get("test_login"), PropertyValues.get("test_password"));
         inboxFolderPage = loggedInHomePage.openMail();
     }
@@ -55,12 +64,16 @@ public class MailTest {
             this.trashFolderPage.deleteLastMailInFolder();
             this.trashFolderPage = null;
         }
-        this.webDriverLaunch.get().closeDriver();
+        Set<String> windowHandles = WebDriverSingleton.getInstance().getWebDriver().getWindowHandles();
+        WebDriverSingleton.getInstance().getWebDriver().close();
+        WebDriverSingleton.getInstance().getWebDriver().switchTo().window(windowHandles.iterator().next());
+        WebDriverSingleton.getInstance().getWebDriver().manage().deleteAllCookies();
+        WebDriverSingleton.getInstance().getWebDriver().navigate().refresh();
     }
 
     @AfterAll
     public static void quitBrowser(){
-        webDriverLaunch.get().quitDriver();
+        WebDriverSingleton.getInstance().closeWebDriver();
     }
 
     @Feature("Send email")
