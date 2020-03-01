@@ -16,12 +16,12 @@ import java.util.concurrent.TimeUnit;
 
 public class WebDriverSingleton {
 
-
   private static ThreadLocal<WebDriverSingleton> instance = new ThreadLocal<>();
   private WebDriver driver;
 
   private WebDriverSingleton() {
-    String browser = System.getProperty("browser") != null ? System.getProperty("browser") : "chrome";
+    //String browser = System.getProperty("browser") != null ? System.getProperty("browser") : "chrome";
+    String browser = "firefox";
     boolean useGrid = System.getProperty("grid") != null;
 
     if (useGrid) {

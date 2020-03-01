@@ -20,7 +20,7 @@ public class LoggedInHomePage {
     public LoggedInHomePage() {
         this.driver = WebDriverSingleton.getInstance().getWebDriver();
         wait = new WebDriverWait(driver, 10);
-        //wait.until(ExpectedConditions.visibilityOfElementLocated(LOGGED_IN_LINK));
+        wait.until(ExpectedConditions.visibilityOfElementLocated(LOGGED_IN_LINK));
     }
 
     public HomePage logout() {

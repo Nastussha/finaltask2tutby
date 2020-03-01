@@ -15,13 +15,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
-import pages.HomePage;
-import pages.InboxFolderPage;
-import pages.LoggedInHomePage;
-import pages.NewEmailPage;
-import pages.SentEmailPage;
-import pages.SentFolderPage;
-import pages.TrashFolderPage;
+import pages.*;
 
 import java.util.Set;
 
@@ -37,9 +31,10 @@ public class MailTest {
     SentFolderPage sentFolderPage;
     TrashFolderPage trashFolderPage;
     String emailSubjectSent;
+    SkeletonPage skeletonPage;
 
     @BeforeAll
-    public void openBrowser(){
+    public void openBrowser() {
         homePage = new HomePage();
         homePage.load();
     }
@@ -52,18 +47,13 @@ public class MailTest {
 
     @AfterEach
     public void closeBrowser() {
-        if (inboxFolderPage != null){
-            inboxFolderPage.deleteLastMailInFolder();
-            inboxFolderPage = null;
+
+        inboxFolderPage.deleteLastEmailByName(emailSubjectSent);
+        trashFolderPage = inboxFolderPage.navigateToTrashEmailFolder();
+        if (!trashFolderPage.isEmptyEmailsFolder()){
+            trashFolderPage.deleteLastEmailByName(emailSubjectSent);
         }
-        if (sentFolderPage != null){
-            sentFolderPage.deleteLastMailInFolder();
-            sentFolderPage = null;
-        }
-        if (this.trashFolderPage != null){
-            this.trashFolderPage.deleteLastMailInFolder();
-            this.trashFolderPage = null;
-        }
+
         Set<String> windowHandles = WebDriverSingleton.getInstance().getWebDriver().getWindowHandles();
         WebDriverSingleton.getInstance().getWebDriver().close();
         WebDriverSingleton.getInstance().getWebDriver().switchTo().window(windowHandles.iterator().next());
@@ -72,7 +62,7 @@ public class MailTest {
     }
 
     @AfterAll
-    public static void quitBrowser(){
+    public static void quitBrowser() {
         WebDriverSingleton.getInstance().closeWebDriver();
     }
 
@@ -112,8 +102,8 @@ public class MailTest {
         emailSubjectSent = GenerateString.generateString();
         sentEmailPage = newEmailPage.sendMail(PropertyValues.get("test_login2"), emailSubjectSent);
         sentFolderPage = sentEmailPage.navigateToSendEmailFolder();
-        this.sentFolderPage.deleteLastMailInFolder();
-        this.trashFolderPage = this.sentFolderPage.navigateToTrashEmailFolder();
-        Assertions.assertTrue(this.trashFolderPage.isEmailTitleExists(emailSubjectSent), "Email from Sent folder is deleted and located in Trash folder");
+        sentFolderPage.deleteLastEmailByName(emailSubjectSent);
+        trashFolderPage = sentFolderPage.navigateToTrashEmailFolder();
+        Assertions.assertTrue(trashFolderPage.isEmailTitleExists(emailSubjectSent), "Email from Sent folder is deleted and located in Trash folder");
     }
 }
